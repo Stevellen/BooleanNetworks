@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jul 19 21:21:26 2019
 
 @author: Steven Belcher (stevellen)
+ECA generator object for use in Boolean Networks course University of Nebraska Omaha
 """
 
 import numpy as np
@@ -27,15 +27,15 @@ class ECA:
         if self.it and self.N:
             self.rows = np.zeros((self.it, self.N), dtype=int)
 
-    def get_rule(self, r):
+    def __get_rule(self, r):
         out = '{:08b}'.format(r)
         return {format(7-i, '03b'):int(out[i]) for i in range(8)}
 
     def plot(self):
-        self.plot_automaton()
+        self.__plot_automaton()
 
-    def plot_automaton(self, col = ['white', 'black'], dims = (12,8), save = False, filename = "eca.png"):
-        col_map = colors.ListedColormap(["white", "black"])
+    def __plot_automaton(self, dims = (12,8), save = False, filename = "eca.png"):
+        col_map = colors.ListedColormap(self.col)
         plt.figure(figsize=dims)
         plt.imshow(self.rows, cmap = col_map, interpolation='nearest')
         plt.xlabel("Nodes")
@@ -45,17 +45,16 @@ class ECA:
         plt.show()
         plt.close()
 
-    def apply_rule(self):
+    def __apply_rule(self):
         fr = np.zeros(self.N, dtype=int)                    # Create first row
         if self.rand:
-            fr = None
+            fr = np.random.random_integers(0,1,self.N)
         else:
             fr[self.N//2] = 1
 
-
         self.rows[0] = pr = fr                              # previous row
         nr = np.zeros(self.N, dtype = int)                  # next row
-        rule = self.get_rule(self.ru)                       # fetch rule dict
+        rule = self.__get_rule(self.ru)                     # fetch rule dict
 
         for i in range(1, self.it):
             for j in range(self.N):
@@ -70,7 +69,7 @@ class ECA:
             pr = np.copy(nr)
             self.rows[i] = np.copy(nr)
 
-    def err_check(self):
+    def __err_check(self):
         err_msg = "ECA generation requires properties {} to be defined with valid values.\n"
         err_details = []
         if self.N == None:
@@ -91,7 +90,7 @@ class ECA:
         if type(self.rand) is not bool:
             raise Exception("Parameter 'rand' must be of type bool.")
 
-    def clear_params(self):
+    def __clear_params(self):
         self.it = None
         self.N = None
         self.ru = None
@@ -115,6 +114,6 @@ class ECA:
                 self.rows = np.zeros((self.it, self.N), dtype=int)
             assert self.rows is not None, "Number of nodes (N) and number of iterations (it) must be defined to build matrix."
 
-        self.err_check()
-        self.apply_rule()
-        self.plot_automaton()
+        self.__err_check()
+        self.__apply_rule()
+        self.__plot_automaton()
