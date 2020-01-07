@@ -79,7 +79,7 @@ def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], 
                 raise Exception("Number of nodes (N) must be a positive integer.")
             if type(it) is not int or it <= 0:
                 raise Exception("Number of iterations (it) must be a positive integer.")
-            if (type(ru) is not int and type(ru) is not np.int32) or ru < 0 or ru > 2**2**(2*k+1):
+            if type(ru) not in [np.int32, np.int64, int]  or ru < 0 or ru > 2**2**(2*k+1):
                 raise Exception(f"Rule (ru) must be an integer in range [0,{2**2**(2*k+1)}]. Given {ru}")
             if type(rand) is not bool:
                 raise Exception("Parameter 'rand' must be of type bool.")
