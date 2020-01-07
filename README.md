@@ -35,7 +35,7 @@ ECA.generate(it=200, n=31, ru=94)
 ```
 
 
-![png](output_4_0.png)
+![png](/images/output_4_0.png)
 
 
 When generate is called from the interpreter, a separate window opens that allows the user to zoom in and reposition the plots. Additionally, more general cellular automata can be produced by adjusting the value of k, broadening the window of parent cells and increasing the number of options for rules to $2^{2k+1}$ options.
@@ -46,7 +46,7 @@ ECA.generate(it=200, n=31, ru=94, k=2)
 ```
 
 
-![png](output_6_0.png)
+![png](/images/output_6_0.png)
 
 
 We see that even using the same set of rules, the increase in parent window leads to an increase in the number of rules and thus drastically alters the nature of the automata. We can look at some of the higher-order rules to see what it's like outside the original [0-255] range.
@@ -57,7 +57,7 @@ ECA.generate(it=200, n=31, ru=25767, k=2)
 ```
 
 
-![png](output_8_0.png)
+![png](/images/output_8_0.png)
 
 
 Of course we can also just randomize the first row to see how it disrupts the pattern.
@@ -68,7 +68,7 @@ ECA.generate(it=200, n=31, ru=25767, k=2, rand=True)
 ```
 
 
-![png](output_10_0.png)
+![png](/images/output_10_0.png)
 
 
 And of course you have to have the color options
@@ -79,7 +79,7 @@ ECA.generate(it=200, n=31, ru=25767, k=2, col=['purple', 'silver'])
 ```
 
 
-![png](output_12_0.png)
+![png](/images/output_12_0.png)
 
 
 The benefit of this module is that it is possible to do a very large number of nodes iterations very quickly when compared with the existing MATLAB script. We'll time the operation for good measure.
@@ -93,7 +93,7 @@ print(f'Finished in {time()-start} seconds on a 7 year old i5 processor.')
 ```
 
 
-![png](output_14_0.png)
+![png](/images/output_14_0.png)
 
 
     Finished in 0.4118633270263672 seconds on a 7 year old i5 processor.
@@ -109,7 +109,7 @@ print(f'Finished in {time()-start} seconds on a 7 year old i5 processor.')
 ```
 
 
-![png](output_16_0.png)
+![png](/images/output_16_0.png)
 
 
     Finished in 30.33807611465454 seconds on a 7 year old i5 processor.
@@ -126,49 +126,45 @@ for rule in np.random.randint(np.iinfo(np.int32).max,size=10):
 ```
 
 
-![png](output_18_0.png)
+![png](/images/output_18_0.png)
 
 
 
-![png](output_18_1.png)
+![png](/images/output_18_1.png)
 
 
 
-![png](output_18_2.png)
+![png](/images/output_18_2.png)
 
 
 
-![png](output_18_3.png)
+![png](/images/output_18_3.png)
 
 
 
-![png](output_18_4.png)
+![png](/images/output_18_4.png)
 
 
 
-![png](output_18_5.png)
+![png](/images/output_18_5.png)
 
 
 
-![png](output_18_6.png)
+![png](/images/output_18_6.png)
 
 
 
-![png](output_18_7.png)
+![png](/images/output_18_7.png)
 
 
 
-![png](output_18_8.png)
+![png](/images/output_18_8.png)
 
 
 
-![png](output_18_9.png)
+![png](/images/output_18_9.png)
 
 
 # Game of Life
 ## Under Construction (Coming Soon)
 
-
-```python
-
-```
