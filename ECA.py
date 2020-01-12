@@ -8,6 +8,7 @@ ECA generator object for use in Boolean Networks course University of Nebraska O
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colors
+import matplotlib.animation as animation
 
 def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], save=False, filename='eca.png', show=True):
         if n and it:
@@ -46,7 +47,7 @@ def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], 
                 fr[n//2] = 1
             rows[0] = pr = fr                              # previous row
             nr = np.zeros(n, dtype = int)                  # next row
-            rule = __get_rule()                          # fetch rule dict
+            rule = __get_rule()                            # fetch rule dict
 
             for i in range(1, it):                         # Need to find a cleaner way to do this
                 density[i-1] = np.mean(rows[i-1])
@@ -88,5 +89,57 @@ def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], 
         __apply_rule()
         __plot_automaton()
 
+
+def game_of_life(n=30, it=50, col = ['white','black'], show=True, save=False):
+    """
+        The game_of_life function is a quick numpy implementation of Conway's game of life.
+        The function takes the grid length and number of iterations as arguments and produces
+        an animation for as long as the window remains open. Note that the user can either save
+        or show the plot, not both. If shown, the game will continue until the window is closed.
+        If saved, a file is generated in the CWD named 'life.mp4'.
+    """
+    try:
+        n = int(n)
+        it = int(it)
+    except Exception as e:
+        print(e)
+
+    def __iterate(framenum, img, world, n):
+        """ Perform animation iteration; returns an Artist. """
+        grid = np.copy(world)
+        for i in range(1,n+1):
+            for j in range(1,n+1):
+                window = world[i-1:i+2, j-1:j+2]
+                total = np.sum(window)
+                if world[i,j] == 1:    # Live cell case
+                    if total-1 not in [2,3]:
+                        grid[i,j] = 0
+                else:                  # Cell is dead
+                    if total == 3:
+                        grid[i,j] = 1
+        img.set_array(grid)
+        world[:,:] = grid[:,:]
+        return img,
+    
+    """ Play the game of life """
+    col_map = colors.ListedColormap(col)
+    world = np.zeros((n+2,n+2), dtype=np.uint8)  # Generate empty world
+    adam, eve = np.random.randint(1,n,n**2//10), np.random.randint(1,n,n**2//10) # sow the seeds of life
+    world[adam, eve] = 1    
+    fig = plt.figure(figsize=(8,8))         # assign figure 
+    im = plt.imshow(world, cmap=col_map, animated=True)   # assign image (Artist)
+    anim = animation.FuncAnimation(fig, __iterate, fargs=(im, world, n), frames=it, interval=50, blit=True)
+
+    if save:
+        show = False
+        anim.save('life.mp4', fps=25)
+    if show:
+        plt.show()
+    plt.close()
+
+
 if __name__ == "__main__":
-    generate(k=2, n=101, it=1000, ru=7500, rand=True)
+    """ A quick, simple demo for if the file is called directly """
+    rule = np.random.randint(1,3000000)
+    generate(ru=rule, n=51, k=2, it=200, col=['green', 'black'])
+    game_of_life(60, col=['green', 'blue'])
