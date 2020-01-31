@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import matplotlib.animation as animation
 
-def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], save=False, filename='eca.png', show=True):
+def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], save=False, filename='eca.png'):
         if n and it:
             density = np.zeros(it)
             rows = np.zeros((it, n), dtype=int)
@@ -34,10 +34,9 @@ def generate(it=None, n=None, k=1, ru=None, rand=False, col=['white', 'black'], 
             plt.plot(np.arange(0, it, 1), density)
             plt.xlabel(f'Mean Density {np.round(np.mean(density), 3)}')
             if save:
-                plt.savefig(filename)
-            if show:
-                plt.show()
-            plt.close()
+                fig = plt.gcf()
+                fig.savefig(filename)
+            plt.show()
 
         def __apply_rule():
             fr = np.zeros(n, dtype=int)                    # Create first row
@@ -126,7 +125,7 @@ def game_of_life(n=30, it=50, col = ['white','black'], show=True, save=False):
     world = np.zeros((n+2,n+2), dtype=np.uint8)  # Generate empty world
     adam, eve = np.random.randint(1,n,n**2//10), np.random.randint(1,n,n**2//10) # sow the seeds of life
     world[adam, eve] = 1    
-    fig = plt.figure(figsize=(8,8))         # assign figure 
+    fig = plt.figure(figsize=(8,8))             # assign figure 
     im = plt.imshow(world, cmap=col_map, animated=True)   # assign image (Artist)
     anim = animation.FuncAnimation(fig, __iterate, fargs=(im, world, n), frames=it, interval=50, blit=True)
 
@@ -141,5 +140,5 @@ def game_of_life(n=30, it=50, col = ['white','black'], show=True, save=False):
 if __name__ == "__main__":
     """ A quick, simple demo for if the file is called directly """
     rule = np.random.randint(1,3000000)
-    generate(ru=rule, n=51, k=2, it=200, col=['green', 'black'])
+    generate(ru=rule, n=51, k=2, it=200, col=['yellow', 'black'], save=True)
     game_of_life(60, col=['green', 'blue'])
