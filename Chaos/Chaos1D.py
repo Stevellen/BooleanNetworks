@@ -9,7 +9,7 @@ from matplotlib import rc
 import matplotlib.pyplot as plt
 
 
-def cobweb_plot(f, k, x0, it=40, save=False, filename='cobweb.png'):
+def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
     """
     Make a cobweb plot.
 
@@ -17,8 +17,9 @@ def cobweb_plot(f, k, x0, it=40, save=False, filename='cobweb.png'):
     iterating x = f(x) starting at x = x0. r is a parameter to the function.
 
     """
+    k = float(k)
     x = np.linspace(0, 1, 500)
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
 
     # Plot y = f(x) and y = x
@@ -26,7 +27,7 @@ def cobweb_plot(f, k, x0, it=40, save=False, filename='cobweb.png'):
     ax.plot(x, x, c='#444444', lw=2)
 
     # Iterate x = f(x) for it steps, starting at (x0, 0).
-    px, py = np.empty((2,it+1,2))
+    px, py = np.empty((2, it+1))
     px[0], py[0] = x0, 0
     for n in range(1, it, 2):
         px[n] = px[n-1]
@@ -36,7 +37,7 @@ def cobweb_plot(f, k, x0, it=40, save=False, filename='cobweb.png'):
 
     # Plot the path traced out by the iteration.
     ax.plot(px, py, c='b', alpha=0.7)
-    
+
     # Annotate and tidy the plot.
     ax.minorticks_on()
     ax.grid(which='minor', alpha=0.5)
@@ -52,15 +53,17 @@ def cobweb_plot(f, k, x0, it=40, save=False, filename='cobweb.png'):
 
     ax.set_ylabel(label)
     ax.set_title('$x_0 = {:.1}, k = {:.2}$'.format(x0, k))
-    plt.axis([0,1,0,1])
+    plt.axis([0, 1, 0, 1])
     if save:
         fig = plt.gcf()
         fig.savefig(filename)
-    plt.show()
-    
+    if show:
+        plt.show()
+
+    return px, py
 
 
 if __name__ == "__main__":
     # Define a simple logistic map example
-    f = lambda x,k: k*x*(1-x)
+    def f(x, k): return k*x*(1-x)
     cobweb_plot(f, 3.1, 0.1, 100)
