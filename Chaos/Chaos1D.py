@@ -17,7 +17,10 @@ def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
     iterating x = f(x) starting at x = x0. r is a parameter to the function.
 
     """
+    # Make sure k is a float
     k = float(k)
+    # Double it for plot generation. Array of length it is returned
+    it *= 2
     x = np.linspace(0, 1, 500)
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
@@ -53,14 +56,14 @@ def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
 
     ax.set_ylabel(label)
     ax.set_title('$x_0 = {:.1}, k = {:.2}$'.format(x0, k))
-    plt.axis([0, 1, 0, 1])
+    # plt.axis([0, 1, 0, 1])
     if save:
         fig = plt.gcf()
         fig.savefig(filename)
     if show:
         plt.show()
 
-    return px, py
+    return px[range(0, it+1, 2)]
 
 
 if __name__ == "__main__":
