@@ -5,11 +5,10 @@ University of Nebraska Omaha
 """
 
 import numpy as np
-from matplotlib import rc
 import matplotlib.pyplot as plt
 
 
-def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
+def cobweb_plot(f, a, x0, k=40, show=True, save=False, filename='cobweb.png'):
     """
     Make a cobweb plot.
 
@@ -18,23 +17,23 @@ def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
 
     """
     # Make sure k is a float
-    k = float(k)
-    # Double it for plot generation. Array of length it is returned
-    it *= 2
+    a = float(a)
+    # Double k for plot generation. Array of length k is returned
+    k *= 2
     x = np.linspace(0, 1, 500)
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111)
 
     # Plot y = f(x) and y = x
-    ax.plot(x, f(x, k), c='#444444', lw=2)
+    ax.plot(x, f(x, a), c='#444444', lw=2)
     ax.plot(x, x, c='#444444', lw=2)
 
-    # Iterate x = f(x) for it steps, starting at (x0, 0).
-    px, py = np.empty((2, it+1))
+    # Iterate x = f(x) for k steps, starting at (x0, 0).
+    px, py = np.empty((2, k+1))
     px[0], py[0] = x0, 0
-    for n in range(1, it, 2):
+    for n in range(1, k, 2):
         px[n] = px[n-1]
-        py[n] = f(px[n-1], k)
+        py[n] = f(px[n-1], a)
         px[n+1] = py[n]
         py[n+1] = py[n]
 
@@ -55,7 +54,7 @@ def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
         label = f.label
 
     ax.set_ylabel(label)
-    ax.set_title('$x_0 = {:.1}, k = {:.2}$'.format(x0, k))
+    ax.set_title('$x_0 = {:.1}, a = {:.2}$'.format(x0, a))
     # plt.axis([0, 1, 0, 1])
     if save:
         fig = plt.gcf()
@@ -63,10 +62,13 @@ def cobweb_plot(f, k, x0, it=40, show=True, save=False, filename='cobweb.png'):
     if show:
         plt.show()
 
-    return px[range(0, it+1, 2)]
+    return px[range(0, k+1, 2)]
 
 
 if __name__ == "__main__":
     # Define a simple logistic map example
-    def f(x, k): return k*x*(1-x)
-    cobweb_plot(f, 3.1, 0.1, 100)
+    def f(x, a): return a*x*(1-x)
+    x0 = np.random.rand()
+    a = np.random.rand()*3+1
+    k = np.random.randint(0, 101)
+    cobweb_plot(f, a, x0, k)
