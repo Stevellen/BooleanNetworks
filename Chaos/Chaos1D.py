@@ -10,19 +10,17 @@ import matplotlib as mpl
 from matplotlib.animation import ArtistAnimation
 
 
-
-def bifurcation_plot(f=lambda x,a: a*x*(1-x), n_points=200, a_step=0.01, iterations=100, animate=True):
-    a_list = np.arange(1,4,a_step)
-    x_in = np.linspace(0,1,n_points)
-    x_out = np.empty((a_list.shape[0], ))
-    fig = plt.figure(figsize=(10,7))
+def bifurcation_plot(f=lambda x, a: a*x*(1-x), n_points=200, a_step=0.01, iterations=100, animate=True):
+    a_list = np.arange(1, 4, a_step)
+    x_in = np.linspace(0, 1, n_points)
+    fig = plt.figure(figsize=(10, 7))
     artists = [[]]
-    for idx,a in enumerate(a_list):
+    for idx, a in enumerate(a_list):
         x = np.copy(x_in)
         for _ in range(iterations):
-            x = f(x,a)
-        im = plt.plot(np.repeat(a,x.shape[0]), x, color='blue', 
-                        marker='o', ls='', markersize=1)
+            x = f(x, a)
+        im = plt.plot(np.repeat(a, x.shape[0]), x, color='blue',
+                      marker='o', ls='', markersize=1)
         artists.append(artists[idx]+im)
     if animate:
         anim = ArtistAnimation(fig, artists, interval=1, repeat=False)
