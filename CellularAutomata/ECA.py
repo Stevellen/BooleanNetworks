@@ -11,7 +11,7 @@ from matplotlib import colors
 import matplotlib.animation as animation
 
 
-def generate_ca(it=250, n=51, ru=np.random.randint(1, 256), k=1, **kwargs):
+def generate_ca(ru=np.random.randint(1, 256), it=250, n=51, k=1, **kwargs):
     """
         Cellular automata generator designed to create plots for rules in the range
         [1,255] with any number of iterations by default but is generalized and 
@@ -46,7 +46,7 @@ def generate_ca(it=250, n=51, ru=np.random.randint(1, 256), k=1, **kwargs):
         if kwargs['filename'][-4:] == '.png' or kwargs['filename'][-4:] == '.jpg':
             filename = kwargs['filename']
         else:
-            filename = kwargs['filename']+'.png'
+            filename = kwargs['filename'] + '.png'
     
 
     density = np.zeros(it)
@@ -83,19 +83,22 @@ def generate_ca(it=250, n=51, ru=np.random.randint(1, 256), k=1, **kwargs):
             fr = np.random.randint(0, 2, n)
         else:
             fr[n//2] = 1
-        rows[0] = pr = fr                              # previous row
-        nr = np.zeros(n, dtype=int)                  # next row
-        rule = __get_rule()                            # fetch rule dict
+        rows[0] = pr = fr                               # previous row
+        nr = np.zeros(n, dtype=int)                     # next row
+        rule = __get_rule()                             # fetch rule dict
 
-        for i in range(1, it):                         # Need to find a cleaner way to do this
+        for i in range(1, it):                          # Need to find a cleaner way to do this
             density[i-1] = np.mean(rows[i-1])
             for j in range(n):
-                if j - k < 0:
-                    nc = np.concatenate([pr[j-k:], pr[:j+k+1]])
-                elif j + k >= n:
-                    nc = np.concatenate([pr[j-k:], pr[:(k+j-n+1)]])
+                if random_parents:
+                    nc = pr[np.random.randint(0,n,2*k+1)]
                 else:
-                    nc = pr[j-k:j+k+1]
+                    if j - k < 0:
+                        nc = np.concatenate([pr[j-k:], pr[:j+k+1]])
+                    elif j + k >= n:
+                        nc = np.concatenate([pr[j-k:], pr[:(k+j-n+1)]])
+                    else:
+                        nc = pr[j-k:j+k+1]
                 r = ''.join([str(v) for v in nc])
                 nr[j] = rule[r]
             pr = np.copy(nr)
@@ -110,9 +113,8 @@ def game_of_life(n=30, it=50, col=['black', 'white'], show=True, save=False):
     """
         The game_of_life function is a quick numpy implementation of Conway's game of life.
         The function takes the grid length and number of iterations as arguments and produces
-        an animation for as long as the window remains open. Note that the user can either save
-        or show the plot, not both. If shown, the game will continue until the window is closed.
-        If saved, a file is generated in the CWD named 'life.mp4'.
+        an animation for as long as the window remains open. If shown, the game will continue until 
+        the window is closed. If saved, a file is generated in the CWD named 'life.mp4'.
     """
     try:
         n = int(n)
@@ -160,5 +162,6 @@ def game_of_life(n=30, it=50, col=['black', 'white'], show=True, save=False):
 if __name__ == "__main__":
     """ A quick, simple demo for if the file is called directly """
     rule = np.random.randint(1, 256)
-    generate_ca(ru=rule, n=51, k=1, it=200, col=['yellow', 'black'], save=True)
-    game_of_life(60)
+    generate_ca(ru=rule, n=51, k=1, it=200, col=['yellow', 'black'])
+    generate_ca(ru=rule, n=51, k=1, it=200, col=['yellow', 'black'], random_parents=True)
+    # game_of_life(60)
